@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database.session import get_db
-from models.user import User
-from models.product import Product
-from schemas.product import ProductCreate, ProductUpdate
-from utils.dependencies import get_current_admin  
+from ..database.session import get_db
+from ..models.user import User
+from ..models.product import Product
+from ..schemas.product import ProductCreate, ProductUpdate
+from ..utils.dependencies import get_current_admin  
 
-router = APIRouter()
+router = APIRouter(prefix="/admin", tags=["admin"])
 
 @router.post("/products/")
 async def admin_create_product(

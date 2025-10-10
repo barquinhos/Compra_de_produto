@@ -3,10 +3,18 @@ import jwt
 from jwt import PyJWTError as JWTError
 from datetime import datetime, timedelta
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
+
+if SECRET_KEY is None:
+    SECRET_KEY = "chave_secreta_temporaria_mude_em_producao"
+if ALGORITHM is None:
+    ALGORITHM = "HS256"
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)

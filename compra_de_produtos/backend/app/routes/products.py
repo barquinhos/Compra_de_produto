@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from typing import Optional, List
-from database.session import get_db
-from models.product import Product, Category
-from schemas.product import (
+from ..database.session import get_db
+from ..models.product import Product, Category
+from ..schemas.product import (
     ProductCreate, ProductUpdate, ProductResponse, ProductList,
     CategoryCreate, CategoryUpdate, CategoryResponse
 )
-from utils.dependencies import get_current_user, get_current_admin
-from models.user import User
+from ..utils.dependencies import get_current_user, get_current_admin
+from ..models.user import User
 
 router = APIRouter()
 
