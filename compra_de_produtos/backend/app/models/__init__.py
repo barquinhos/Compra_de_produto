@@ -1,14 +1,13 @@
-from .user_models import User, UserProfile
-from .product_models import Category, Product
-from .order_models import Cart, CartItem, Order, OrderItem
+from .user import User
+from .product import Product, Category
+from .order import Cart, CartItem, Order, OrderItem
 
 __all__ = [
-    "User", 
-    "UserProfile", 
-    "Category", 
+    "User",
     "Product", 
-    "Cart", 
+    "Category",
+    "Cart",
     "CartItem", 
-    "Order", 
+    "Order",
     "OrderItem"
 ]

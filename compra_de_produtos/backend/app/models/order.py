@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from datetime import datetime
 import enum
-from app.database import Base
+from ..database.session import Base
 
 class OrderStatus(enum.Enum):
     PENDING = "aguardando_pagamento"

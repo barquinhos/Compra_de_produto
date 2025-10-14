@@ -16,6 +16,15 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
 
+class UserLogin(BaseModel):
+    email: str
+    password: str
+
+    @validator('email')
+    def validate_email(cls, v):
+        if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', v):
+            raise ValueError('Email inválido')
+
 class UserUpdate(BaseModel):
     email: Optional[str] = None
     full_name: Optional[str] = None

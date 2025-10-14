@@ -5,7 +5,7 @@ import os
 
 load_dotenv()
 
-DATABASE_URL = "sqlite:///./app.db"
+DATABASE_URL = "sqlite:///./new_app.db"
 
 engine = create_engine(
     DATABASE_URL,

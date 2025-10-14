@@ -10,6 +10,10 @@ from .routes import auth, products
 from .routes.auth import router as auth_router
 from .routes.products import router as products_router
 from .routes.admin import router as admin_router
+from .routes import user, cart, order
+from .routes.user import router as user_router
+from .routes.cart import router as cart_router 
+from .routes.order import router as order_router
 
 Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Sistema de Compras", version="3.0")
@@ -17,6 +21,9 @@ app = FastAPI(title="Sistema de Compras", version="3.0")
 app.include_router(admin_router)
 app.include_router(auth.router, prefix="/auth", tags=["Autenticação"])
 app.include_router(products.router, prefix="/products", tags=["Produtos"])
+app.include_router(cart_router, prefix="", tags=["Carrinho"])
+app.include_router(order_router, prefix="", tags=["Pedidos"])
+app.include_router(user_router, prefix="/users", tags=["Usuários"])
 
 def get_html_template() -> str:
     """Retorna o template HTML da página inicial"""
@@ -28,7 +35,16 @@ def get_html_template() -> str:
         {"method": "GET", "path": "/products/{id}", "description": "Obter produto específico"},
         {"method": "POST", "path": "/products/", "description": "Criar novo produto"},
         {"method": "POST", "path": "/auth/register", "description": "Registrar usuário"},
-        {"method": "POST", "path": "/auth/login", "description": "Login de usuário"}
+        {"method": "POST", "path": "/auth/login", "description": "Login de usuário"},
+        {"method": "GET", "path": "/users/profile", "description": "Obter perfil do usuário"},
+        {"method": "PUT", "path": "/users/profile", "description": "Atualizar perfil do usuário"},
+        {"method": "GET", "path": "/cart", "description": "Obter carrinho do usuário"},
+        {"method": "POST", "path": "/cart/items", "description": "Adicionar item ao carrinho"},
+        {"method": "PUT", "path": "/cart/items/{id}", "description": "Atualizar item do carrinho"},
+        {"method": "DELETE", "path": "/cart/items/{id}", "description": "Remover item do carrinho"},
+        {"method": "POST", "path": "/orders/checkout", "description": "Finalizar compra"},
+        {"method": "GET", "path": "/orders", "description": "Listar pedidos do usuário"},
+        {"method": "GET", "path": "/orders/{id}", "description": "Obter detalhes do pedido"}
     ]
     
     modules_info = [
@@ -50,7 +66,7 @@ def get_html_template() -> str:
     ]
     
     stats_info = [
-        {"number": "8", "label": "Endpoints", "suffix": ""},
+        {"number": "15", "label": "Endpoints", "suffix": ""},
         {"number": "3", "label": "Módulos", "suffix": ""},
         {"number": "100", "label": "Funcional", "suffix": "%"}
     ]
@@ -594,7 +610,6 @@ async def create_product(name: str, price: float):
         "product": {"name": name, "price": price}
     }
 
-# Endpoint adicional para informações da API
 @app.get("/api/info")
 async def api_info():
     """Retorna informações sobre a API"""
@@ -602,7 +617,15 @@ async def api_info():
         "name": "Sistema de E-commerce API",
         "version": "3.0",
         "description": "API completa para gerenciamento de loja virtual",
-        "endpoints_count": 6,
+        "endpoints_count": 15,
         "modules_count": 3,
-        "status": "active"
+        "status": "active",
+        "features": [
+            "Autenticação JWT",
+            "CRUD de Produtos", 
+            "Gestão de Categorias",
+            "Carrinho de Compras",
+            "Sistema de Pedidos",
+            "Perfis de Usuário"
+        ]
     }
