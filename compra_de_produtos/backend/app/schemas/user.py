@@ -9,13 +9,25 @@ class UserBase(BaseModel):
 
     @validator('email')
     def validate_email(cls, v):
-        # Validação simples de email com regex
         if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', v):
             raise ValueError('Email inválido')
         return v
 
 class UserCreate(UserBase):
     password: str
+
+class UserUpdate(BaseModel):
+    email: Optional[str] = None
+    full_name: Optional[str] = None
+
+    @validator('email')
+    def validate_email(cls, v):
+        if v is not None and not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', v):
+            raise ValueError('Email inválido')
+        return v
+
+    class Config:
+        from_attributes = True
 
 class UserResponse(UserBase):
     id: int

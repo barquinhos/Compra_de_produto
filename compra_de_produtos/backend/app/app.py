@@ -22,13 +22,13 @@ def get_html_template() -> str:
     """Retorna o template HTML da página inicial"""
     
     endpoints_info = [
+        {"method": "POST", "path": "/admin/products/", "description": "Criar produto (Admin)"},
+        {"method": "GET", "path": "/admin/dashboard", "description": "Dashboard administrativo"},
         {"method": "GET", "path": "/products/", "description": "Listar produtos"},
         {"method": "GET", "path": "/products/{id}", "description": "Obter produto específico"},
         {"method": "POST", "path": "/products/", "description": "Criar novo produto"},
         {"method": "POST", "path": "/auth/register", "description": "Registrar usuário"},
         {"method": "POST", "path": "/auth/login", "description": "Login de usuário"}
-        # {"method": "POST", "path": "/admin/products/", "description": "Criar produto (Admin)"},
-        # {"method": "GET", "path": "/admin/dashboard", "description": "Dashboard administrativo"}
     ]
     
     modules_info = [
@@ -55,7 +55,6 @@ def get_html_template() -> str:
         {"number": "100", "label": "Funcional", "suffix": "%"}
     ]
     
-    # Gerar HTML dinamicamente
     endpoints_html = "".join(
         f'''
         <div class="endpoint-item">
