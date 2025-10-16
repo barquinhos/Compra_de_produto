@@ -1,11 +1,11 @@
-from logging.config import fileConfig
+import logging.config
+fileConfig = logging.config.fileConfig
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from alembic import context
 import os
 import sys
 
-# Configure o caminho
 current_dir = os.path.dirname(os.path.abspath(__file__))
 backend_path = os.path.join(current_dir, '..', 'compra_de_produtos', 'backend')
 sys.path.insert(0, os.path.abspath(backend_path))
@@ -15,13 +15,10 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Importe a Base
-from app.database.session import Base
-
-# 🔥 IMPORTE TODOS OS SEUS MODELOS PARA O ALAMBIC ENCONTRÁ-LOS
-from app.models.user import User
-from app.models.product import Product, Category
-from app.models.order import Cart, CartItem, Order, OrderItem
+# from app.database.session import Base
+# from app.models.user import User
+# from app.models.product import Product, Category
+# from app.models.order import Cart, CartItem, Order, OrderItem
 
 target_metadata = Base.metadata
 
