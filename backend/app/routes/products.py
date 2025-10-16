@@ -12,7 +12,6 @@ from ..models.user import User
 
 router = APIRouter()
 
-# 📍 ROTAS PÚBLICAS (sem autenticação)
 @router.get("/products/", response_model=ProductList)
 async def list_products(
     skip: int = Query(0, ge=0, description="Pular registros"),
@@ -48,7 +47,7 @@ async def list_categories(db: Session = Depends(get_db)):
     categories = db.query(Category).filter(Category.is_active == True).all()
     return categories
 
-# 📍 ROTAS ADMIN (requer autenticação de admin)
+# ROTAS ADMIN (requer autenticação de admin)
 @router.post("/products/", response_model=ProductResponse)
 async def create_product(
     product_data: ProductCreate,
@@ -95,7 +94,7 @@ async def delete_product(
         )
     return {"message": "Produto desativado com sucesso"}
 
-# 📍 ROTAS CATEGORIAS (admin)
+# ROTAS CATEGORIAS (admin)
 @router.post("/categories/", response_model=CategoryResponse)
 async def create_category(
     category_data: CategoryCreate,

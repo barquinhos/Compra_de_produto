@@ -127,7 +127,7 @@ async def get_order(
     
     return order
 
-# 📍 ROTAS ADMIN PARA PEDIDOS
+# ROTAS ADMIN PARA PEDIDOS
 @router.get("/admin/orders", response_model=List[OrderResponse])
 async def list_all_orders(
     skip: int = 0,
