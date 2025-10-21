@@ -68,10 +68,16 @@ def checkout(
     
     return order
 
+<<<<<<< HEAD
 @router.get("/", response_model=List[OrderOut])
 def get_user_orders(
     current_user: db_models.Consumers = Depends(get_current_user),
     db: Session = Depends(get_db),
+=======
+# ROTAS ADMIN PARA PEDIDOS
+@router.get("/admin/orders", response_model=List[OrderResponse])
+async def list_all_orders(
+>>>>>>> fde290070665078b7fb2a7b807f597cd00297d39
     skip: int = 0,
     limit: int = 10
 ):

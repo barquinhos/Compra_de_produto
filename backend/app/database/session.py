@@ -10,7 +10,7 @@ DATABASE_URL = "sqlite:///./new_app.db"
 engine = create_engine(
     DATABASE_URL,
     connect_args={"check_same_thread": False},
-    echo=True  # Mostra SQL no console (remova em produção)
+    echo=True  # Mostra SQL no console 
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
