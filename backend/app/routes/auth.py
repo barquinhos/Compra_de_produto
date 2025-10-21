@@ -1,48 +1,48 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from ..database.session import get_db
-from ..models.user import User
-from ..schemas.user import UserCreate, UserResponse, Token
-from ..utils.security import get_password_hash, verify_password, create_access_token
-from datetime import timedelta
-from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy.exc import IntegrityError
 
-router = APIRouter()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
+from backend.app.database.session import get_db
+from backend.app.models import db_models
+from backend.app.models.seller import SellerCreate, SellerOut, SellerLogin
+from backend.app.models.consumer import Token
+from backend.app.utils.security import get_password_hash, verify_password, create_access_token
+from backend.app.services.auth_service import authenticate_seller
 
-@router.post("/register", response_model=UserResponse)
-async def register(user_data: UserCreate, db: Session = Depends(get_db)):
-    db_user = db.query(User).filter(User.email == user_data.email).first()
-    if db_user:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email já registrado")
-    
-    # Criar novo usuário
-    hashed_password = get_password_hash(user_data.password)
-    db_user = User(
-        email=user_data.email,
-        hashed_password=hashed_password,
-        full_name=user_data.full_name,
-        is_admin=False
+router = APIRouter(prefix="/seller/auth", tags=["Autenticação de Vendedores"])
+
+@router.post("/register", response_model=SellerOut, status_code=status.HTTP_201_CREATED)
+def register_seller_user(payload: SellerCreate, db: Session = Depends(get_db)):
+    hashed_password = get_password_hash(payload.sel_password)
+    new_seller_user = db_models.SellerUser(
+        sel_email=payload.sel_email,
+        sel_password=hashed_password,
+        sel_name=payload.sel_name,
     )
     
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    
-    return db_user
+    db.add(new_seller_user)
+    try:
+        db.commit()
+        db.refresh(new_seller_user)
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Email já está em uso"
+        )
+    return new_seller_user
 
 @router.post("/login", response_model=Token)
-async def login(email: str, password: str, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == email).first()
-    if not user or not verify_password(password, user.hashed_password):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Credenciais inválidas"
-        )
-    
-    access_token = create_access_token(
-        data={"sub": user.email, "id": user.id},
-        expires_delta=timedelta(hours=24)
-    )
-    
-    return {"access_token": access_token, "token_type": "bearer"}
+def login_for_seller_access_token(payload: SellerLogin, db: Session = Depends(get_db)):
+    try:
+        access_token = authenticate_seller(db, payload.sel_email, payload.sel_password)
+
+        return {"access_token": access_token, "token_type": "bearer"}
+
+    except ValueError as e:
+        if str(e) == "invalid-credentials":
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="E-mail ou senha de vendedor incorretos",
+            )
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Erro interno no servidor")

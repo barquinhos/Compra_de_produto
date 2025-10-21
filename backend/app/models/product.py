@@ -1,48 +1,25 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, Numeric, ForeignKey
-from sqlalchemy.orm import relationship
-from datetime import datetime
-from ..database.session import Base
+from pydantic import BaseModel, Field
+from pydantic.config import ConfigDict
+from typing import Optional
+import enum
 
-class Category(Base):
-    __tablename__ = "categories"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100), unique=True, nullable=False)
-    description = Column(Text)
-    is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
-    products = relationship("Product", back_populates="category")
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column
+from backend.app.models.db_models import Category
 
-class Product(Base):
-    __tablename__ = "products"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(200), nullable=False)
-    description = Column(Text)
-    price = Column(Numeric(10, 2), nullable=False)  
-    stock = Column(Integer, default=0)
-    sku = Column(String(100), unique=True)  
-    image_url = Column(String(500)) 
-    
-    # Chave estrangeira para categoria
-    category_id = Column(Integer, ForeignKey("categories.id"))
-    
-    # Status do produto
-    is_active = Column(Boolean, default=True)
-    is_featured = Column(Boolean, default=False)
-    
-    # Timestamps
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
-    # Relações
-    category = relationship("Category", back_populates="products")
-    cart_items = relationship("CartItem", back_populates="product")
-    order_items = relationship("OrderItem", back_populates="product")
-    
-    def soft_delete(self):
-        """Marca o produto como inativo (soft delete)"""
-        self.is_active = False
-        self.updated_at = datetime.utcnow()
+class ProductBase(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    prod_name: str = Field(..., min_length=3, max_length=100, description="Nome do Produto")
+    prod_description: Optional[str] = Field(None, max_length=500, description="Descrição do Produto")
+    prod_price: float = Field(..., gt=0, description="Preço do Produto")
+    prod_category: Category = Field(..., description="Categoria do Produto - CATEGORY_A, CATEGORY_B ou CATEGORY_C")
+
+class ProductCreate(ProductBase):
+
+    model_config = ConfigDict(from_attributes=True)
+
+class ProductOut(ProductBase):
+
+    prod_id: int
+    model_config = ConfigDict(from_attributes=True)

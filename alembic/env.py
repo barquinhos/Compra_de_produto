@@ -20,7 +20,7 @@ if config.config_file_name is not None:
 # from app.models.product import Product, Category
 # from app.models.order import Cart, CartItem, Order, OrderItem
 
-target_metadata = Base.metadata
+target_metadata = None
 
 def run_migrations_online():
     connectable = engine_from_config(
