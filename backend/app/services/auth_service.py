@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from backend.app.models import db_models
-from backend.app.utils.security import verify_password, create_access_token
+from models import db_models
+from utils.security import verify_password, create_access_token
 
 def authenticate_consumer(db: Session, email: str, password: str) -> str:
 
@@ -11,7 +11,7 @@ def authenticate_consumer(db: Session, email: str, password: str) -> str:
     if not consumer or not verify_password(password, consumer.con_password):
         raise ValueError("invalid-credentials")
 
-    token_data = {"sub": str(consumer.cus_id), "scope": "customer"}
+    token_data = {"sub": str(consumer.con_id), "scope": "consumer"}
     access_token = create_access_token(subject=token_data)
     return access_token
 

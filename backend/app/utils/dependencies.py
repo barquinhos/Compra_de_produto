@@ -3,9 +3,9 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from jose import JWTError
 
-from ..database.session import get_db
-from ..models import db_models
-from ..utils.security import decode_token
+from database.session import get_db
+from models import db_models
+from utils.security import decode_token
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
@@ -32,7 +32,7 @@ def get_current_user(
         raise credentials_exception
 
     user = None
-    if scope == "customer":
+    if scope == "consumer":
         user = db.get(db_models.Consumers, int(user_id))
     elif scope == "seller":
         user = db.get(db_models.SellerUser, int(user_id))

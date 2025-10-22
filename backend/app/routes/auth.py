@@ -2,12 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
-from backend.app.database.session import get_db
-from backend.app.models import db_models
-from backend.app.models.seller import SellerCreate, SellerOut, SellerLogin
-from backend.app.models.consumer import Token
-from backend.app.utils.security import get_password_hash, verify_password, create_access_token
-from backend.app.services.auth_service import authenticate_seller
+from database.session import get_db
+from models import db_models
+from models.seller import SellerCreate, SellerOut, SellerLogin
+from models.consumer import Token
+from utils.security import get_password_hash, verify_password, create_access_token
+from services.auth_service import authenticate_seller
 
 router = APIRouter(prefix="/seller/auth", tags=["Autenticação de Vendedores"])
 

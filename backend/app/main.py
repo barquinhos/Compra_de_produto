@@ -1,11 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-# Importações do backend.app
-from backend.app.database.database import engine, Base
-from backend.app.routes import auth, cart, consumer, order, products
+from database.database import engine, Base
+from routes import auth, cart, consumer, order, products
 
-# Criar tabelas
+
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -27,7 +26,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Incluir rotas
+try:
+        from routes import auth, cart, consumer, order, products
+except ImportError as e:
+        print(f"Error importing routes: {e}")
+        raise
+
 app.include_router(auth.router)
 app.include_router(products.router)
 app.include_router(cart.router)
@@ -38,7 +42,6 @@ app.include_router(consumer.router)
 def read_root():
     return {"message": "Bem-vindo à API de Compras de Produtos!"}
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
-"@ | Out-File -FilePath "main.py" -Encoding utf8
+@app.get("/health")
+def health_check():
+    return {"status": "healthy", "message": "API está funcionando"}

@@ -1,8 +1,9 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from typing import Optional, List
 
-from ..models import db_models
-from ..models.product import Category
+from models import db_models
+from models.product import Category
 
 def create_new_product(db: Session, product_data: dict) -> db_models.Product:
     new_product = db_models.Product(**product_data)

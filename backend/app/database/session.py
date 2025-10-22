@@ -6,9 +6,10 @@ import os
 load_dotenv()
 
 DATABASE_URL = "sqlite:///./new_app.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///./database/app.db"
 
 engine = create_engine(
-    DATABASE_URL,
+    SQLALCHEMY_DATABASE_URL,
     connect_args={"check_same_thread": False},
     echo=True  # Mostra SQL no console 
 )
