@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models import db_models
+from backend.app import db_models
 from utils.security import verify_password, create_access_token
 
 def authenticate_consumer(db: Session, email: str, password: str) -> str:

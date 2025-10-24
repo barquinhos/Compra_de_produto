@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from typing import Optional, List
 
-from database.session import get_db
+from backend.app.session import get_db
 from models.product import ProductCreate, ProductOut
-from models.db_models import Category
+from backend.app.db_models import Category
 from services.product_service import create_new_product, list_products
 
 router = APIRouter()

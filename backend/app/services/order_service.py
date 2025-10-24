@@ -1,7 +1,7 @@
 from typing import List
 from sqlalchemy.orm import Session
 
-from backend.app.models import db_models
+from backend.app import db_models
 from backend.app.models.order import OrderCreate
 
 def get_active_order_for_consumer(db: Session, consumer_id: int) -> db_models.Order:

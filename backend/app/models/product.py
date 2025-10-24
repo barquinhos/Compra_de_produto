@@ -5,7 +5,7 @@ from enum import Enum
 
 from sqlalchemy import Enum, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
-from models.db_models import Category
+from backend.app.db_models import Category
 
 
 class ProductBase(BaseModel):

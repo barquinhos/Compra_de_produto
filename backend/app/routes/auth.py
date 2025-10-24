@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
-from database.session import get_db
-from models import db_models
+from backend.app.session import get_db
+from backend.app import db_models
 from models.seller import SellerCreate, SellerOut, SellerLogin
 from models.consumer import Token
 from utils.security import get_password_hash, verify_password, create_access_token

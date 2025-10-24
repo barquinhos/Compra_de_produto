@@ -4,7 +4,7 @@ from typing import List
 from datetime import datetime
 
 from .product import ProductOut
-from .db_models import OrderStatus
+from ..db_models import OrderStatus
 
 class OrderItemBase(BaseModel):
 

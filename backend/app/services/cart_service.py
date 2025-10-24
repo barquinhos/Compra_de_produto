@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from models import db_models
+from backend.app import db_models
 from models.cart import CartItemCreate, CartItemUpdate
 
 class CartService:

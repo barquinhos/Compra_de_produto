@@ -11,7 +11,7 @@ from sqlalchemy import (
     Text
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from database.session import Base
+from backend.app.session import Base
 import enum
 
 class Consumers(Base):
