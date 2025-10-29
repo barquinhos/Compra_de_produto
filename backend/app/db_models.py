@@ -11,7 +11,7 @@ from sqlalchemy import (
     Text
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from backend.app.session import Base
+from app.session import Base
 import enum
 
 class Consumers(Base):
@@ -45,7 +45,7 @@ class Product(Base):
     description: Mapped[str] = mapped_column(Text)
     prod_price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)  
     stock: Mapped[int] = mapped_column(Integer, default=0)
-    prod_category_id: Mapped[int] = mapped_column(Integer, ForeignKey("categories.id"))
+    prod_category_id: Mapped[str] = mapped_column(String(50), ForeignKey("categories.id"))
 
     category: Mapped["Category"] = relationship(back_populates="products")
     cart_items: Mapped[list["CartItem"]] = relationship(back_populates="product")

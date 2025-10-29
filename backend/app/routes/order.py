@@ -3,10 +3,10 @@ from sqlalchemy.orm import Session
 from typing import List
 from datetime import datetime
 
-from backend.app.session import get_db
-from backend.app import db_models
-from models.order import OrderCreate, OrderOut
-from utils.dependencies import get_current_user
+from app.session import get_db
+from app import db_models
+from app.models.order import OrderCreate, OrderOut
+from app.utils.dependencies import get_current_user
 
 router = APIRouter(prefix="/orders", tags=["Pedidos"])
 
