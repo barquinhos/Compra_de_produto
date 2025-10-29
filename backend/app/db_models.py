@@ -1,9 +1,6 @@
-from sqlalchemy import (
-    Column, 
+from sqlalchemy import ( 
     Integer, 
-    String, 
-    Boolean, 
-    Float, 
+    String,
     ForeignKey, 
     Numeric, 
     UniqueConstraint,
